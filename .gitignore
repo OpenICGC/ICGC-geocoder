@@ -1,0 +1,14 @@
+npm-debug.log*
+node_modules
+.vscode
+
+/scripts/*.js
+*.js.map
+*.test.js
+node_modules
+npm-debug.log
+coverage
+flow-coverage
+.DS_Store
+.nyc_output
+.eslintcache
