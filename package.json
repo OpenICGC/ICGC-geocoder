@@ -16,14 +16,18 @@
     "build": "run-s lint clean flow:build",
     "run:example": "node ./scripts/example.js",
     "clean": "rimraf scripts/*",
-    "lint": "eslint --fix --cache --ignore-path .gitignore src",
+    "lint": "eslint --fix --cache src",
     "flow": "flow",
     "flow:check": "flow check ./src/*.js",
     "flow:build": "flow-remove-types ./src/ -d ./scripts/ --all --pretty",
-    "test": "jest"
+    "test": "run-s lint test:unit test:coverage",
+    "test:watch": "jest --watch",
+    "test:unit": "jest",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "@geostarters/common": "^0.2.3"
+    "@geostarters/common": "^0.2.3",
+    "axios": "^0.20.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
