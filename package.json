@@ -1,6 +1,6 @@
 {
   "name": "@geostarters/icgc-geocoder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Library to interact with the ICGC pelias geocoder",
   "main": "scripts/index.js",
   "homepage": "https://github.com/OpenICGC/ICGC-geocoder",
