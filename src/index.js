@@ -37,9 +37,26 @@ class Geocoder {
 
 	}
 
-	static createPoint(point: Point2d) {
+	static async batchReverseGeocoding(coords: Array<Coord>, layers?: Array<Layers>, limit?: number) {
 
-		return {lat: point.y, lon:  point.x};
+		const self = this;
+		try {
+
+			let addrs = [];
+			const results = coords.map(coord => self.reverseGeocoding(coord, layers, limit));
+			for (const result of results) {
+
+				const addr = await result;
+				addrs = [...addrs, ...addr];
+
+			}
+			return addrs;
+
+		} catch (e) {
+
+			console.log(e);
+
+		}
 
 	}
 
