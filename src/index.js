@@ -37,9 +37,34 @@ class Geocoder {
 
 	}
 
-	static async batchReverseGeocoding(coords: Array<Coord>, layers?: Array<Layers>, limit?: number) {
+	static async batchReverseGeocoding(coords: Array<Coord>, layers?: Array<Layers>, limit?: number, maxChunk?: number) {
 
 		const self = this;
+		let results = [];
+		if (maxChunk && (coords.length > maxChunk)) {
+
+			const chunks = self.chunkArray(coords, maxChunk);
+			for (const chunk of chunks) {
+
+				const result = await self.processBatchReverseGeocoding(chunk, layers, limit);
+				results = [...results, ...result];
+
+			}
+
+		} else {
+
+			results = await self.processBatchReverseGeocoding(coords, layers, limit);
+
+		}
+
+		return results;
+
+	}
+
+	static async processBatchReverseGeocoding(coords: Array<Coord>, layers?: Array<Layers>, limit?: number) {
+
+		const self = this;
+
 		try {
 
 			let addrs = [];
@@ -57,6 +82,20 @@ class Geocoder {
 			console.log(e);
 
 		}
+
+	}
+
+	static chunkArray(myArray: Array, chunkSize: number) {
+
+		const results = [];
+
+		while (myArray.length) {
+
+			results.push(myArray.splice(0, chunkSize));
+
+		}
+
+		return results;
 
 	}
 
