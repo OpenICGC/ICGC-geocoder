@@ -16,13 +16,14 @@ describe("Geocoder library: ", () => {
 	};
 
 	it("reverse geocoding {lat: 42.0012, lng: 1.5432}", async () => {
-		const features = await Geocoder.reverseGeocoding(myCoord);
-		expect(features.length).toBe(10);
+		const geocoded = await Geocoder.reverseGeocoding(myCoord);
+		expect(geocoded.geocoded.length).toBe(10);
 	});
 
+	
 	it("reverse geocoding {lat: 42.0012, lng: 1.5432}", async () => {
-		const features = await Geocoder.reverseGeocoding(myCoord, ["pk","topo"]);
-		expect(features.length).toBe(10);
+		const geocoded = await Geocoder.reverseGeocoding(myCoord, ["pk","topo"]);
+		expect(geocoded.geocoded.length).toBe(10);
 	});
 
 	it("reverse geocoding layers error", async () => {
@@ -36,30 +37,31 @@ describe("Geocoder library: ", () => {
 		
 		}
 	});
-
+	
 	it("reverse geocoding {lat: 42.0012, lng: 1.5432} limit 1", async () => {
-		const features = await Geocoder.reverseGeocoding(myCoord, null, 1);
-		expect(features.length).toBe(1);
+		const geocoded = await Geocoder.reverseGeocoding(myCoord, null, 1);
+		expect(geocoded.geocoded.length).toBe(1);
 	});
 
 	it("reverse geocoding {lat: 42.0012, lng: 1.5432} layer pk limit 2", async () => {
-		const features = await Geocoder.reverseGeocoding(myCoord, ["pk"], 2);
-		expect(features.length).toBe(2);
+		const geocoded = await Geocoder.reverseGeocoding(myCoord, ["pk"], 2);
+		expect(geocoded.geocoded.length).toBe(2);
 	});
-
+	
 	it("reverse geocoding Carrer De Balmes 303 {lat: 41.402212, lng: 2.145536} layer address limit 1", async () => {
-		const features = await Geocoder.reverseGeocoding(balmesCoord, ["address"], 1);
-		expect(features.length).toBe(1);
-		expect(features[0].properties.name).toBe("Carrer De Balmes 303")
+		const geocoded = await Geocoder.reverseGeocoding(balmesCoord, ["address"], 1);
+		expect(geocoded.geocoded.length).toBe(1);
+		expect(geocoded.geocoded[0].properties.name).toBe("Carrer De Balmes 303")
 	});
 
 	it("batch reverse geocoding 2 coords layer pk limit 1", async () => {
 		const features = await Geocoder.batchReverseGeocoding([myCoord, balmesCoord], ["pk","address"], 1);
-		const isBalmes = features.some(feature => feature.properties.name === "Carrer De Balmes 303");
+		const isBalmes = features.some(feature => {
+			return feature.geocoded.some(addr => addr.properties.name === "Carrer De Balmes 303")
+		});
 		expect(features.length).toBe(2);
 		expect(isBalmes).toBeTruthy();
 	});
-
 
 	it("batch reverse geocoding 10 coords layer pk limit 1 maxblock 3", async () => {
 		const coords = [
@@ -75,7 +77,9 @@ describe("Geocoder library: ", () => {
 			{lat: 41.354611, lng: 2.01861054}
 		];
 		const features = await Geocoder.batchReverseGeocoding(coords, ["pk","address"], 1, 3);
-		const isBalmes = features.some(feature => feature.properties.name === "Carrer De Balmes 303");
+		const isBalmes = features.some(feature => {
+			return feature.geocoded.some(addr => addr.properties.name === "Carrer De Balmes 303")
+		});
 		expect(features.length).toBe(10);
 		expect(isBalmes).toBeTruthy();
 	});
@@ -94,7 +98,9 @@ describe("Geocoder library: ", () => {
 			{lat: 41.354611, lng: 2.01861054}
 		];
 		const features = await Geocoder.batchReverseGeocoding(coords, ["pk","address"], 1);
-		const isBalmes = features.some(feature => feature.properties.name === "Carrer De Balmes 303");
+		const isBalmes = features.some(feature => {
+			return feature.geocoded.some(addr => addr.properties.name === "Carrer De Balmes 303")
+		});
 		expect(features.length).toBe(10);
 		expect(isBalmes).toBeTruthy();
 	});

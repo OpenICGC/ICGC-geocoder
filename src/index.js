@@ -31,9 +31,10 @@ class Geocoder {
 			queryUrl.push(`size=${limit}`);
 
 		}
-
+		const geocoded = {...coord};
 		const addr = await Axios.get(`${url}${queryUrl.join("&")}`);
-		return addr.data.features || null;
+		geocoded.geocoded = addr.data.features || null;
+		return geocoded;
 
 	}
 
@@ -67,12 +68,12 @@ class Geocoder {
 
 		try {
 
-			let addrs = [];
+			const addrs = [];
 			const results = coords.map(coord => self.reverseGeocoding(coord, layers, limit));
 			for (const result of results) {
 
 				const addr = await result;
-				addrs = [...addrs, ...addr];
+				addrs.push(addr);
 
 			}
 			return addrs;
@@ -85,13 +86,14 @@ class Geocoder {
 
 	}
 
-	static chunkArray(myArray: Array, chunkSize: number) {
+	static chunkArray(data: Array, chunkSize: number) {
 
 		const results = [];
+		const toChunk = [...data];
 
-		while (myArray.length) {
+		while (toChunk.length) {
 
-			results.push(myArray.splice(0, chunkSize));
+			results.push(toChunk.splice(0, chunkSize));
 
 		}
 
