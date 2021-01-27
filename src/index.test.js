@@ -74,7 +74,7 @@ describe("Geocoder library: ", () => {
 			{lat: 41.40783443, lng: 2.17438582},
 			{lat: 41.85043856, lng: 2.39620388},
 			{lat: 41.26456869, lng: 1.93521235},
-			{lat: 41.354611, lng: 2.01861054}
+			{lat: -.00000901, lng: -1.4885053}
 		];
 		const features = await Geocoder.batchReverseGeocoding(coords, ["pk","address"], 1, 3);
 		const isBalmes = features.some(feature => {
@@ -95,7 +95,7 @@ describe("Geocoder library: ", () => {
 			{lat: 41.40783443, lng: 2.17438582},
 			{lat: 41.85043856, lng: 2.39620388},
 			{lat: 41.26456869, lng: 1.93521235},
-			{lat: 41.354611, lng: 2.01861054}
+			{lat: -.00000901, lng: -1.4885053}
 		];
 		const features = await Geocoder.batchReverseGeocoding(coords, ["pk","address"], 1);
 		const isBalmes = features.some(feature => {
